@@ -3,18 +3,28 @@ const app = express();
 app.listen(3000, ()=>{
     console.log("The Server is Running on port 3000")
 })
-app.get("/user/:userId/:Name/:Password",(req,res)=>{
-    console.log(req.params)
-    res.send({firstName : "Nandish",    lastName : "Rao"})
-})
- 
-app.post("/user" , (req,res)=>{
-    res.send("The user data has been updated in the database")
-})
 
-app.use("/test", (req,res)=>{
-    res.send("from test path")
-})
+app.use("/user", 
+    (req,res,next)=>{
+    next()
+},
+(req,res,next)=>{
+    console.log("this is from the second handler")
+    next()
+},
+(req , res, next)=>{
+    console.log("third handler")
+    next();
+},
+(req , res, next)=>{
+    console.log("fourth handler")
+    next();
+},
+(req , res, next)=>{
+    console.log("fifth handler")
+    res.send("from the fifth handler")
+}
+)
 
 
 
