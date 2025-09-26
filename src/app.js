@@ -1,21 +1,18 @@
 const express= require("express")
 const app = express();
-const {adminAuth , userAuth}=require("./middlewares/auth")
+
+app.get("/getuserdata" , ( req, res)=>{
+    throw new Error("gajabijja error")
+    res.send("user Logged in ")
+})
+app.use("/" ,(err , req, res, next )=>{
+    if(err){
+        res.status(500).send("There is some fuckup in the server ")
+    }
+})    
+
+
 app.listen(3000, ()=>{
     console.log("The Server is Running on port 3000")
 })
-app.use("/admin" ,adminAuth)
-
-app.get("/user/login" , ( req, res)=>{
-    res.send("user Logged in ")
-})
-
-app.get("/user/data" , userAuth, ( req, res)=>{
-    res.send("authorised user")
-})
-
-app.get("/admin/dashboard" , (req,res)=>{
-    res.send("Welcome to Admin Dashboard")
-})
-
-
+ 
