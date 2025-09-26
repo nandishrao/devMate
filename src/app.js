@@ -2,7 +2,8 @@ const express= require("express")
 const connectDB =require("./config/database")
 const app = express();
 const User = require ("./models/user")
-app.use(express.json())
+
+app.use(express.json())//middleware helps in converting json 
 
 
 
