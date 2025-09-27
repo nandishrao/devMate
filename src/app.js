@@ -5,8 +5,6 @@ const User = require ("./models/user")
 
 app.use(express.json())//middleware helps in converting json 
 
-
-
 app.post("/signup" , async ( req , res )=>{ 
     //creating a new instance of the user model
      const user = new User(req.body)
@@ -18,9 +16,30 @@ app.post("/signup" , async ( req , res )=>{
      }
 })
 
- 
+app.get("/user" , async (req,res)=>{
+    const email = req.body.emailId  
+
+    try{
+    const user = await User.find({emailId : email})
+    if(user.length === 0){
+        res.send("user not found")
+    }else{
+        res.send(user)
+    }
+    }catch (err){
+    res.status(400).send("Couldn't fetch user")
+    }
+})
 
 
+app.get("/feed" , async (req,res)=>{
+   try{
+     const users = await User.find({})
+     res.send(users)
+   }catch(err){
+    res.status(500).send("something went wrong" )
+   }
+})
 
 
 connectDB().then(()=>{
