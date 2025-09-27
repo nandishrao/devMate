@@ -4,7 +4,7 @@ const app = express();
 const User = require ("./models/user")
 
 app.use(express.json())//middleware helps in converting json 
-
+//save an user in the database
 app.post("/signup" , async ( req , res )=>{ 
     //creating a new instance of the user model
      const user = new User(req.body)
@@ -16,6 +16,7 @@ app.post("/signup" , async ( req , res )=>{
      }
 })
 
+//GET method to get user by a particular emailID
 app.get("/user" , async (req,res)=>{
     const email = req.body.emailId  
 
@@ -31,7 +32,7 @@ app.get("/user" , async (req,res)=>{
     }
 })
 
-
+//GET method to get all the users to show on the feed
 app.get("/feed" , async (req,res)=>{
    try{
      const users = await User.find({})
@@ -41,6 +42,28 @@ app.get("/feed" , async (req,res)=>{
    }
 })
 
+ //DELETE method to delete a user by MONGOID
+ app.delete("/user" ,  async (req , res)=>{
+   try{
+    const id = req.body.UserID
+    const user = await User.findByIdAndDelete(id)
+    res.send("the user is successfully deleted ")
+   }catch(err){
+    res.status(500).send("There was some problem deleting the user")
+   }
+
+ })
+//PATCH method to update user data
+ app.patch("/user" , async( req , res )=>{
+    const userID = req.body.UserID
+    const data = req.body
+    try{
+        await User.findByIdAndUpdate(userID , data)
+        res.send("the user details was updated")
+    }catch(err){
+        res.send("the update was failed")
+    }
+ })
 
 connectDB().then(()=>{
     console.log("Database connection is Successfull")
