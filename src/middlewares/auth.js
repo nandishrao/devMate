@@ -1,3 +1,4 @@
+//implemented JWT auth tokens and cookies 
 const jwt = require("jsonwebtoken")
 const User = require("../models/user")
 const { request } = require("express")
