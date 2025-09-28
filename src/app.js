@@ -2,17 +2,28 @@ const express = require("express");
 const connectDB = require("./config/database");
 const app = express();
 const User = require("./models/user");
+const { validateSignUp } = require("./utils/validation");
+const bycrypt = require("bcrypt")
 
 app.use(express.json()); //middleware helps in converting json
 //save an user in the database
 app.post("/signup", async (req, res) => {
-  //creating a new instance of the user model
-  const user = new User(req.body);
+  //validate data
   try {
+    validateSignUp(req);
+    const {firstName , lastName , emailId, password} = req.body
+
+    //Encrypting password
+    const passwordHash = await bycrypt.hash(password , 10)
+    const user = new User({firstName,
+       lastName,
+       emailId,
+      password : passwordHash
+      });
     await user.save();
     res.send("user data saved Succesfully ");
   } catch (err) {
-    res.status(400).send("Error saving the data" + err.message);
+    res.status(400).send("Error saving the data  " + err.message);
   }
 });
 
@@ -54,13 +65,35 @@ app.delete("/user", async (req, res) => {
 });
 //PATCH method to update user data
 app.patch("/user", async (req, res) => {
-  const userID = req.body;
-  const data = req.body;
   try {
-    await User.findByIdAndUpdate(userID, data ,{runValidators : true} );
-    res.send("the user details was updated");
+    const { userID, ...data } = req.body;
+
+    const ALLOWED_UPDATES = [
+      "gender",
+      "about",
+      "photoURL",
+      "password",
+      "skills",
+    ];
+
+    const isUpdateAllowed = Object.keys(data).every((k) =>
+      ALLOWED_UPDATES.includes(k),
+    );
+
+    if (!isUpdateAllowed) {
+      return res.status(400).send("Update not allowed");
+    }
+    if (data?.skills.length >= 3) {
+      throw new Error("yooo you dont even have that much skills");
+    }
+    await User.findByIdAndUpdate(userID, data, {
+      runValidators: true,
+      new: true,
+    });
+
+    res.send("The user details were updated");
   } catch (err) {
-    res.send("the update was failed");
+    res.status(500).send("The update failed: " + err.message);
   }
 });
 
