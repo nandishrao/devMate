@@ -3,7 +3,7 @@ const connectDB = require("./config/database");
 const app = express();
 const User = require("./models/user");
 const { validateSignUp } = require("./utils/validation");
-const bycrypt = require("bcrypt")
+const bcrypt = require("bcrypt")
 
 app.use(express.json()); //middleware helps in converting json
 //save an user in the database
@@ -26,6 +26,24 @@ app.post("/signup", async (req, res) => {
     res.status(400).send("Error saving the data  " + err.message);
   }
 });
+
+app.post("/login" , async (req , res)=>{
+ try{
+  const {emailId , password} = req.body
+  const user =await  User.findOne({emailId : emailId})
+  if(!user){
+    throw new Error("Invalid creadential")
+  }
+  const isPasswordValid = await bcrypt.compare(password , user.password)
+  if(isPasswordValid){
+    res.send("Login Successfull")
+  }else{
+    res.send("Invalid Credential")
+  }
+ }catch(err){
+ res.status(400).send("Error saving the data" + err.message);
+ }
+})  
 
 //GET method to get user by a particular emailID
 app.get("/user", async (req, res) => {
