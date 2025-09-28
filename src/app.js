@@ -54,7 +54,7 @@ app.delete("/user", async (req, res) => {
 });
 //PATCH method to update user data
 app.patch("/user", async (req, res) => {
-  const userID = req.body.UserID;
+  const userID = req.body;
   const data = req.body;
   try {
     await User.findByIdAndUpdate(userID, data ,{runValidators : true} );
