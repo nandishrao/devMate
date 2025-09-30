@@ -10,4 +10,15 @@ if(!firstName || !lastName){
     throw new Error("The password is weak please enter a storng password")
 }
 }
-module.exports= {validateSignUp}
+
+const validateEditRequest = (req)=>{
+    const allowedEditFields = ["firstName","lastName","age","about","password","gender","about", "skills"]
+    const isEditAllowed =Object.keys(req.body)
+    .every((field) => allowedEditFields
+    .includes(field))
+
+    return isEditAllowed ; 
+}
+
+
+module.exports= {validateSignUp, validateEditRequest}
