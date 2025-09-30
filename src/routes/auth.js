@@ -1,6 +1,11 @@
 const express = require("express")
-
 const authRouter = express.Router()
+const User = require("./models/user");
+const { validateSignUp } = require("./utils/validation");
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+
+
 
 authRouter.post("/signup", async (req, res) => {
   //validate data
@@ -32,7 +37,6 @@ authRouter.post("/login", async (req, res) => {
     const isPasswordValid = await user.validatePassword(password);
     if (isPasswordValid) {
       const token = await user.getJWT()
-      //add the JWT token to the cookie and send it to the user
       res.cookie("token",token)
       res.send("Login Successfull");
     } else {
