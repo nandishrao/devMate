@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { findById } = require("./user");
 const connectionRequestSchema = mongoose.Schema(
   {
     fromUserId: {
@@ -11,9 +12,10 @@ const connectionRequestSchema = mongoose.Schema(
     },
     status: {
       type: String,
+      required: true,
       enum: {
-        value: ["ignored", "interested", "accepted", "rejected"],
-        message: ` {VALUE} is inncorrect status`,
+        values: ["ignored", "interested", "accepted", "rejected"],
+        message: ` {VALUE} is incorrect status`,
       },
     },
   },
@@ -21,7 +23,20 @@ const connectionRequestSchema = mongoose.Schema(
     timestamps: true,
   }
 );
-const ConnectionRequestModel = mongoose.model(
-  "Connection   Request",
+
+connectionRequestSchema.index({fromUserId : 1 , toUserId : 1 })
+connectionRequestSchema.pre("save" , function (next){
+   const connectionRequest=this
+  if(connectionRequest.fromUserId.equals(connectionRequest.toUserId)){
+    throw new Error("You cannot send a connection to yourself")
+  }
+  next();
+})
+const ConnectionRequestModel = new mongoose.model(
+  "ConnectionRequest",
   connectionRequestSchema
 );
+
+
+
+module.exports = ConnectionRequestModel;
