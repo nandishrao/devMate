@@ -73,13 +73,19 @@ requestRouter.post(
         status: "interested",
       });
       if (!connectionRequest) {
-       res.send("no connections")
+        throw new Error("No Connection found");
       }
-
+      console.log(connectionRequest);
+      const { fromUserId } = connectionRequest;
+      const requestRecievedBy = await User.findById({
+        _id: fromUserId,
+      });
+      console.log(requestRecievedBy);
+      const { firstName } = requestRecievedBy;
       connectionRequest.status = status;
       const data = await connectionRequest.save();
       res.json({
-        message: "You accepted the request",
+        message: "You accepted the request by " + firstName,
         data,
       });
     } catch (err) {
