@@ -75,12 +75,10 @@ requestRouter.post(
       if (!connectionRequest) {
         throw new Error("No Connection found");
       }
-      console.log(connectionRequest);
       const { fromUserId } = connectionRequest;
       const requestRecievedBy = await User.findById({
         _id: fromUserId,
       });
-      console.log(requestRecievedBy);
       const { firstName } = requestRecievedBy;
       connectionRequest.status = status;
       const data = await connectionRequest.save();
