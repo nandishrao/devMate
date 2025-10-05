@@ -1,21 +1,26 @@
 const express = require("express");
 const connectDB = require("./config/database");
 const app = express();
-const cookieParser = require("cookie-parser")
-
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "http://localhost:5173/login",
+    credentials: true,
+  })
+);
 app.use(express.json()); //middleware helps in converting json
-app.use(cookieParser());//middleware for parsing cookies
+app.use(cookieParser()); //middleware for parsing cookies
 
-const authRouter = require("./routes/auth")
-const profileRouter = require("./routes/profile")
-const requestRouter = require("./routes/requests")
-const userRouter = require("./routes/user")
+const authRouter = require("./routes/auth");
+const profileRouter = require("./routes/profile");
+const requestRouter = require("./routes/requests");
+const userRouter = require("./routes/user");
 
-
-app.use("/" , authRouter)
-app.use("/" , profileRouter)
-app.use("/", requestRouter)
-app.use("/" , userRouter)
+app.use("/", authRouter);
+app.use("/", profileRouter);
+app.use("/", requestRouter);
+app.use("/", userRouter);
 
 connectDB()
   .then(() => {
