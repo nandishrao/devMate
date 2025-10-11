@@ -3,28 +3,18 @@ const connectDB = require("./config/database");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+
 app.use(
   cors({
     origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-    credentials: true,
+    methods: ["GET", "POST", "PATCH", "DELETE"], 
+    allowedHeaders: ["Content-Type", "Authorization"], 
+    credentials: true, 
   })
 );
 
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "http://localhost:5173");
-//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
-//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-//   // Handle preflight OPTIONS request
-//   if (req.method === "OPTIONS") {
-//     return res.sendStatus(200);
-//   }
-//   next();
-// });
-
-app.use(express.json()); //middleware helps in converting json
-app.use(cookieParser()); //middleware for parsing cookies
+app.use(express.json()); 
+app.use(cookieParser()); 
 
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
