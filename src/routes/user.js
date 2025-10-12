@@ -12,7 +12,14 @@ userRouter.get("/user/requests/showInterested", userAuth, async (req, res) => {
     const connectionRequest = await ConnectionRequest.find({
       toUserId: loggedInUser._id,
       status: "interested",
-    }).populate("fromUserId", ["firstName", "lastName"]); //populates the info of the specific id
+    }).populate("fromUserId", [
+      "firstName",
+      "lastName",
+      "photoURL",
+      "gender",
+      "age",
+      "about",
+    ]); 
     res.json({
       message: "the interested requests to your account are",
       connectionRequest,
@@ -56,7 +63,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
 
     const page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit);
-    limit = limit > 10 ? 10 : limit
+    limit = limit > 10 ? 10 : limit;
     const skip = (page - 1) * limit;
     const connectionRequests = await ConnectionRequest.find({
       $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],

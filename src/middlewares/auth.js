@@ -1,7 +1,6 @@
-//implemented JWT auth tokens and cookies
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const { request } = require("express");
+
 const userAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
@@ -14,12 +13,13 @@ const userAuth = async (req, res, next) => {
     if (!loggedinuser) {
       throw new Error("User not found");
     }
-    request.user = loggedinuser;
+    req.user = loggedinuser;  
     next();
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
   }
 };
+
 module.exports = {
   userAuth,
 };
