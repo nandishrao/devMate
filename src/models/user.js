@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 const userSchema = new mongoose.Schema(
   {
     firstName: {
@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       maxLength: 50,
-      minLength: 5,
     },
     lastName: {
       type: String,
@@ -56,7 +55,8 @@ const userSchema = new mongoose.Schema(
     },
     photoURL: {
       type: String,
-      default: "https://static.vecteezy.com/system/resources/previews/060/605/418/non_2x/default-avatar-profile-icon-social-media-user-free-vector.jpg",
+      default:
+        "https://static.vecteezy.com/system/resources/previews/060/605/418/non_2x/default-avatar-profile-icon-social-media-user-free-vector.jpg",
       validate(value) {
         if (!validator.isURL(value)) {
           throw new Error("the PhotoURL is invalid" + value);
@@ -67,21 +67,20 @@ const userSchema = new mongoose.Schema(
       type: [String],
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
-userSchema.methods.getJWT = async function (){
+userSchema.methods.getJWT = async function () {
   const user = this;
-  const token =  jwt.sign(
-    {_id : user._id} , "NANDISH@$RAO" , {expiresIn : "7d"})
-    return token;
-}
-userSchema.methods.validatePassword = async function (passwordInputByUser){
+  const token = jwt.sign({ _id: user._id }, "NANDISH@$RAO", {
+    expiresIn: "7d",
+  });
+  return token;
+};
+userSchema.methods.validatePassword = async function (passwordInputByUser) {
   user = this;
-  const passwordHash = user.password
-  const isPasswordValid  = bcrypt.compare(
-    passwordInputByUser,
-     passwordHash);
+  const passwordHash = user.password;
+  const isPasswordValid = bcrypt.compare(passwordInputByUser, passwordHash);
   return isPasswordValid;
-}
-  
+};
+
 module.exports = mongoose.model("User", userSchema);

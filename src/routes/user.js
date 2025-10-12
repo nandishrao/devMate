@@ -19,7 +19,7 @@ userRouter.get("/user/requests/showInterested", userAuth, async (req, res) => {
       "gender",
       "age",
       "about",
-    ]); 
+    ]);
     res.json({
       message: "the interested requests to your account are",
       connectionRequest,
