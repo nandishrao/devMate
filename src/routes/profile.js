@@ -33,7 +33,6 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
 profileRouter.patch("/profile/password", async (req, res) => {
   try {
     const user = req.user; //password hash from the DB
-    console.log(user);
     const { oldPassword, newPassword } = req.body; //current password entered by user to verify of change of password
     const isPasswordSame = await bcrypt.compare(oldPassword, user.password);
     if (!isPasswordSame) {
