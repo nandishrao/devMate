@@ -1,6 +1,6 @@
 const membershipAmount = {
-    'starter' : 300,
-    'pro': 500,
+  starter: 300,
+  pro: 700,
 };
 
-module.exports = {membershipAmount};
+module.exports = { membershipAmount };
