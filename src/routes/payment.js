@@ -9,7 +9,7 @@ const { membershipAmount } = require("../utils/constants");
 //   validateWebhookSignature,
 // } = require("razorpay/dist/utils/razorpay-utils");
 
-paymentRouter.post("/payment/create", userAuth, async (req, res) => { 
+paymentRouter.post("/payment/create", userAuth, async (req, res) => {
   try {
     const { membershipType } = req.body;
     const { firstName, lastName, emailId } = req.user;
@@ -115,6 +115,4 @@ paymentRouter.post("/payment/success", userAuth, async (req, res) => {
   }
 });
 
-
 module.exports = paymentRouter;
-  
